@@ -1,0 +1,19 @@
+{
+  "required_api_version": "^2.0.0",
+  "name": "Passwordgeneratior",
+  "description": "Generat password",
+  "developer_name": "Tim Hansen",
+  "icon": "images/icon.png",
+  "options": {
+    "query_debounce": 0.1
+  },
+  "preferences": [
+    {
+      "id": "demo_kw",
+      "type": "keyword",
+      "name": "Demo",
+      "description": "Demo extension",
+      "default_value": "dm"
+    }
+  ]
+}
