@@ -1,11 +1,6 @@
 import sys
 import os
 
-# Add the extension directory to Python path
-extension_dir = os.path.dirname(os.path.abspath(__file__))
-if extension_dir not in sys.path:
-    sys.path.insert(0, extension_dir)
-
 from ulauncher.api.client.Extension import Extension
 from ulauncher.api.client.EventListener import EventListener
 from ulauncher.api.shared.event import KeywordQueryEvent
@@ -15,7 +10,6 @@ from ulauncher.api.shared.action.HideWindowAction import HideWindowAction
 from ulauncher.api.shared.action.CopyToClipboardAction import CopyToClipboardAction
 from ulauncher.api.shared.action.RunScriptAction import RunScriptAction
 
-from src.actions import GeneratePasswordAction
 from src.password import generate_password
 
 class DemoExtension(Extension):
@@ -55,12 +49,14 @@ class KeywordQueryEventListener(EventListener):
 
         length = int(argument)
 
+        password = generate_password(length)
+
         items.append(
             ExtensionResultItem(
                 icon='images/icon.png',
                 name=f'Password ({length} characters)',
                 description='Press Enter to copy to clipboard',
-                on_enter=GeneratePasswordAction(length)
+                on_enter=CopyToClipboardAction(password)
             )
         )
         return RenderResultListAction(items)
