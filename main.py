@@ -1,16 +1,14 @@
 from ulauncher.api.client.Extension import Extension
 from ulauncher.api.client.EventListener import EventListener
-from ulauncher.api.shared.event import KeywordQueryEvent, ItemEnterEvent
+from ulauncher.api.shared.event import KeywordQueryEvent
 from ulauncher.api.shared.item.ExtensionResultItem import ExtensionResultItem
 from ulauncher.api.shared.action.RenderResultListAction import RenderResultListAction
 from ulauncher.api.shared.action.HideWindowAction import HideWindowAction
+from ulauncher.api.shared.action.CopyToClipboardAction import CopyToClipboardAction
+from ulauncher.api.shared.action.RunScriptAction import RunScriptAction
 
-import string
-import secrets
-
-def generate_password(length):
-    alphabet = string.ascii_letters + string.digits
-    return ''.join(secrets.choice(alphabet) for _ in range(length))
+from src.actions import GeneratePasswordAction
+from src.password import generate_password
 
 class DemoExtension(Extension):
 
@@ -22,41 +20,44 @@ class DemoExtension(Extension):
 class KeywordQueryEventListener(EventListener):
 
     def on_event(self, event, extension):
-        item = []
+        items = []
 
         argument = event.get_argument() or ""
         argument = argument.strip()
 
         if not argument:
-            item.append(
+            items.append(
                 ExtensionResultItem(
                     icon='images/icon.png',    
                     name = 'Password Generator',
                     description = 'Usage: pwg <length> (e.g. pwg 12)',
                 )
             )
-            return RenderResultListAction(item)
+            return RenderResultListAction(items)
         
         if not argument.isdigit():
-            item.append(
+            items.append(
                 ExtensionResultItem(
                     icon='images/icon.png',
                     name = 'Invalid input',
                     description = 'Length must be a number (e.g. pwg 12)',
                 )
             )
-            return RenderResultListAction(item)
+            return RenderResultListAction(items)
 
         length = int(argument)
 
-        item.append(
+        items.append(
             ExtensionResultItem(
                 icon='images/icon.png',
-                name=f'Generate password ({length} characters)',
-                description='Press Enter to generate',
+                name=f'Password ({length} characters)',
+                description='Press Enter to copy to clipboard',
+                on_enter=GeneratePasswordAction(length)
             )
         )
-        return RenderResultListAction(item)
+        return RenderResultListAction(items)
+    
+
 
 if __name__ == '__main__':
     DemoExtension().run() 
