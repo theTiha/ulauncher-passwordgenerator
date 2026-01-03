@@ -1,6 +1,3 @@
-import sys
-import os
-
 from ulauncher.api.shared.action.BaseAction import BaseAction
 from ulauncher.api.shared.action.CopyToClipboardAction import CopyToClipboardAction
 
