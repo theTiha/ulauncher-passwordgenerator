@@ -1,3 +1,11 @@
+import sys
+import os
+
+# Add the extension directory to Python path
+extension_dir = os.path.dirname(os.path.abspath(__file__))
+if extension_dir not in sys.path:
+    sys.path.insert(0, extension_dir)
+
 from ulauncher.api.client.Extension import Extension
 from ulauncher.api.client.EventListener import EventListener
 from ulauncher.api.shared.event import KeywordQueryEvent
